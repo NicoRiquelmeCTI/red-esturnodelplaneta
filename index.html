@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/index.css" type="text/css">
+    <script src="https://d3js.org/d3.v7.js"></script> <!--  Cargar D3 -->
+    <script src="https://unpkg.com/topojson-client@3"></script> <!--  Cargar topoJSON -->
+    <title>Red EsTurnoDelPlaneta</title>
+</head>
+<body>
+    
+    <div class="board-page-container">
+        <header class="header">
+            
+            <a href="https://www.instagram.com/esturnodelplaneta/" class="logo"> </a>
+        
+            <div class="title_header">
+                <h1 id="title"> Herramienta de visualización: Red de la cuenta @esturnodelplaneta </h1>
+            </div>
+        </header>
+
+        <content class="content_container">
+            <div class="board_container">
+            <div class="view_board">
+                
+                <div id="grafico">
+                </div>
+            </div>
+            <!-- <div id="log">
+                <p>El explorador de precipitaciones es una herramienta que permite encontrar geográficamente distintas estaciones de medición de precipitaciones en Chile gracias a los datos publicados por el CR2</p>
+                <p>Made with ☕️☕️☕️ by @nicoriquelmecti</p>
+            </div> -->
+            
+                
+            </div>
+            <div class='map_column' id="mc">
+                
+                <div id="selector">
+                    <div class="selectors" class="button-container">
+                        <h4>Buscar cuenta:</h4>
+                        <select id="nombre_cuenta">
+                        </select>
+                    </div>
+                </div>
+                                                         
+            </div>
+        </content>
+    <script src="src/index.js"></script>
+</div>
+</body>
+
+</html>

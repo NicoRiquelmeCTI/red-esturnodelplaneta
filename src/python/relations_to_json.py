@@ -1,6 +1,16 @@
 import json
 import re
 import argparse
+import csv
+
+# función que recibe un nombre de usuario y retorna los atributos del perfil asociado
+def search_followings(username):
+    # archivo con los seguidores de la comunidad en estudio
+    with open("../files/esturnodelplaneta_followers.csv", newline='') as csvfile:
+        followers = csv.DictReader(csvfile)
+        for current_follower in followers:
+            if current_follower['username'] == username:
+                return current_follower
 
 def str2bool(v):
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
@@ -47,7 +57,7 @@ def relations_to_json(config):
 
     id_n = 1
     for account in nodes:
-        dict["nodes"].append({"id": id_n, "name": account, "group": 1})
+        dict["nodes"].append({"id": id_n, "name": account, "data": search_followings(account), "group": 1})
         name_to_id[account] = id_n
         id_n += 1
 
@@ -60,10 +70,10 @@ def relations_to_json(config):
         if (accounts[1], accounts[0]) in edges:
             bi_links.add((id_1, id_2))
             if (id_2, id_1) not in bi_links:
-                dict["links"].append({"id": id_l, "source": id_1, "target": id_2, "value": 0.3, "bi_directional": True})
+                dict["links"].append({"id": id_l, "source": id_1, "target": id_2, "value": 1, "bi_directional": True})
                 id_l += 1
         else:
-            dict["links"].append({"id": id_l, "source": id_1, "target": id_2, "value": 0.3, "bi_directional": False})
+            dict["links"].append({"id": id_l, "source": id_1, "target": id_2, "value": 1, "bi_directional": False})
             id_l += 1
 
     with open(output_json_file, 'w') as outfile:
