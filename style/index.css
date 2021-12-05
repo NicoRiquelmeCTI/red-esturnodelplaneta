@@ -83,29 +83,30 @@ h4 {
 }
 
 
-#grafico{
+#svg{
 	height: 100%;
 	width: 80%;
 	margin: auto;
-	display: inline-flex;
+	display: flexbox;
 	
 }
-#lista{
-	height: 100%;
-	width: 20%;
-	margin: auto;
-	display: vertical;
-}
-  
-#lista > p {
-	margin: 0 auto;
-	padding: 15px 0;
-	height: 30px;
-	width: 100%;
-	color: teal;
-	background-color: snow;
-	border-bottom: 2px dashed slategrey;
+/* -------------------- TOOLTIP ------------------ */
+
+div.tooltip {
+	
+	text-align: center;
+	position: absolute;
+	padding: 2px;
+	font: 12px sans-serif;
+	background-color: rgb(14, 182, 89);
+	border: solid;
+	border-radius: 5px;
+	border-width: 2px;
+	pointer-events: none;
+	z-index: 2;
   }
+  
+
   
 #selector {
 	width: auto;

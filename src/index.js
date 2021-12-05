@@ -1,6 +1,6 @@
 //se define el tamaño del SVG
-const width = d3.select('#grafico').node().getBoundingClientRect().width;
-const height = d3.select('#grafico').node().getBoundingClientRect().height;
+const width = d3.select('#svg').node().getBoundingClientRect().width;
+const height = d3.select('#svg').node().getBoundingClientRect().height;
 const margin = {
     top: 10,
     bottom: 10,
@@ -10,7 +10,7 @@ const margin = {
 
 // se define el SVG
 const svg = d3
-    .select("#grafico")
+    .select("#svg")
     .append("svg")
     .attr("width", width)
     .attr("height", height);
@@ -42,6 +42,43 @@ const iniciarSimulacion = (nodos, enlaces) => {
     const circleScale = d3.scaleLinear()
         .domain([Math.min(...Object.values(conexiones)), Math.max(...Object.values(conexiones))])
         .range([3, 10]);
+
+    // Tooltip para mostrar info del nodo
+    const Tooltip = d3.select("#svg").append("div")
+        .style("opacity",0)
+        .attr("class", "tooltip")
+
+    const mouseover = function(d) {
+        
+            Tooltip
+            .transition()
+            .duration(200)
+            .style("opacity", .9)
+            d3.select(this)
+            .style("stroke", "black")
+            .style("opacity", 1)
+        }
+    const mousemove = function(d) {
+            
+            console.log(d.path[0].__data__)
+            Tooltip
+            .html("@" + d.path[0].__data__.name +"<br> Conexiones: " + conexiones[d.path[0].__data__.id])
+            .style("left", (d.path[0].cx.baseVal.value+50) + "px")
+            .style("top", (d.path[0].cy.baseVal.value+50) + "px");
+            
+            
+            //console.log(d3.select(this))
+
+        }
+        var mouseleave = function(d) {
+            Tooltip
+            .style("opacity", 0)
+            d3.select(this)
+            .style("stroke", "#fff")
+            .style("opacity", 0.8)
+        }
+
+    // Evento de arrastrar un nodo
     const drag = (sim) => {
         const dragstarted = (event) => {
             if (!event.active) sim.alphaTarget(0.5).restart();
@@ -83,7 +120,10 @@ const iniciarSimulacion = (nodos, enlaces) => {
         .join("circle")
         .attr("r", (d) => circleScale(conexiones[d.id]))
         .attr("fill", (d) => scale(d.group))
-        .call(drag(simulacion));
+        .call(drag(simulacion))
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave)
 
     simulacion.on("tick", () => {
         circulos
