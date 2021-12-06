@@ -149,6 +149,20 @@ select {
     margin-bottom: 5px;
 }
 
+.button {
+	transition-duration: 0.4s;
+	background-color: white;
+	padding: 10px;
+	border-radius: 5px;
+	color: black;
+	border: 2px solid #4CAF50; /* Green */
+  }
+  
+.button:hover {
+	background-color: #4CAF50; /* Green */
+	color: white;
+  }
+
 #lista {
 	height: 40vh;
 	width: 80%;

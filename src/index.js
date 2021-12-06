@@ -60,8 +60,10 @@ const iniciarSimulacion = (nodos, enlaces) => {
     // añade las leyendas
     svg.append("circle").attr("cx",20).attr("cy",30).attr("r", 6).style("fill", "#ff7f0e");
     svg.append("circle").attr("cx",20).attr("cy",60).attr("r", 6).style("fill", "#1f77b4");
-    svg.append("text").attr("x", 40).attr("y", 30).text("es una Organización o pertenece a una").style("font-size", "10px").attr("alignment-baseline","middle");
-    svg.append("text").attr("x", 40).attr("y", 60).text("Es una Persona").style("font-size", "10px").attr("alignment-baseline","middle");
+    svg.append("line").attr("x1", 10).attr("x2", 30).attr("y1", 90).attr("y2", 90).style("stroke", "#42EE20" ).attr("stroke-with", "2px");
+    svg.append("text").attr("x", 40).attr("y", 30).text("esta cuenta es una Organización").style("font-size", "10px").attr("alignment-baseline","middle");
+    svg.append("text").attr("x", 40).attr("y", 60).text("Esta cuenta es una Persona").style("font-size", "10px").attr("alignment-baseline","middle");
+    svg.append("text").attr("x", 40).attr("y", 90).text("Ambas cuentas se siguen").style("font-size", "10px").attr("alignment-baseline","middle");
 
     nodos.sort(function(a, b){
         //console.log(a);
@@ -69,10 +71,10 @@ const iniciarSimulacion = (nodos, enlaces) => {
         if(a.data.full_name > b.data.full_name) { return 1; }
         return 0;
     })
-    nodos.forEach((nodo) => {
+    nodos.forEach((nodo,i) => {
         const option = document.createElement("option");
         if (nodo.data != undefined){
-            option.value = nodo.id;
+            option.value = [i,nodo.id];
             option.innerHTML = nodo.data.full_name + " | @"+ nodo.data.username;
             nombre_cuenta.appendChild(option);
             
@@ -157,6 +159,12 @@ const iniciarSimulacion = (nodos, enlaces) => {
             .on("end", dragended);
     };
 
+    function check_bi(enlace){
+        if(enlace.bi_directional == true){
+            return "#42EE20" 
+        }
+    }
+
     const lineas = svg
         .append("g")
         .attr("stroke", "#999")
@@ -164,6 +172,7 @@ const iniciarSimulacion = (nodos, enlaces) => {
         .selectAll("line")
         .data(enlaces)
         .join("line")
+        .attr("stroke", check_bi)
         .attr("stroke-width", (d) => Math.sqrt(d.value));
 
     const circulos = svg
@@ -199,16 +208,21 @@ d3.json("src/relations.json")
     const nodos = datos.nodes;
     const enlaces = datos.links;
 
+
+
     iniciarSimulacion(nodos, enlaces);
     
     // Busqueda y foco sobre un elemento en específico
     nombre_cuenta.onchange = () =>  {
         circulo  = svg.selectAll("circle")
                 .style("stroke", "white")
-                .filter((d,i) => d.id === parseInt(nombre_cuenta.value))
+                .filter((d,i) => i === parseInt(nombre_cuenta.value.split(",")[0])+2)
                 .style("stroke", "red");
+                
+       
     };
     function buscar_nombre(nodo_id){
+        console.log(nodo_id);
         var n = "";
         nodos.forEach(element => {
             //console.log("Nodo para buscar nombre: ")
@@ -223,11 +237,12 @@ d3.json("src/relations.json")
     // Boton para añadir al filtro
     agregar_cuenta.on("click", (e) => {
         // añade id de la cuenta seleccionada
-        if (cuentas_seleccionadas.includes(nombre_cuenta.value) == false){
-            cuentas_seleccionadas.push(nombre_cuenta.value);
+        console.log(nombre_cuenta);
+        if (cuentas_seleccionadas.includes(nombre_cuenta.value.split(",")[1]) == false){
+            cuentas_seleccionadas.push(nombre_cuenta.value.split(",")[1]);
             //console.log("Cuentas: "+ cuentas_seleccionadas);
             const texto = document.createElement("p");
-            const nombre = "@"+buscar_nombre(nombre_cuenta.value);
+            const nombre = "@"+buscar_nombre(nombre_cuenta.value.split(",")[1]);
             
             texto.textContent = nombre.toString();
             // Boton para quitar del filtro
