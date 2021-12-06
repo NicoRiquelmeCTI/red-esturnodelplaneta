@@ -115,10 +115,13 @@ div.tooltip {
 	
 }
 
-.map_column{
+.filter_column{
 	width: 25%;
 	height: auto;
 	display: flex;
+	padding: 4px;
+	text-align: center;
+	align-items: center;
 	flex-direction: column;
 	background-color:rgba(36, 102, 115, 0.8);
 	
@@ -146,18 +149,23 @@ select {
     margin-bottom: 5px;
 }
 
-#log{
-	padding-block: 5px;
-	padding: 20px;
-	border-bottom: whitesmoke;
-	border-style: inset;
-	display: block;
-	width: auto;
-	height: 30%;
-	background-color: black;
-	opacity: 0.8;
-	color: white;
-	font-family: "Space Mono", monospace;
-	overflow-y: visible;
-	
+#lista {
+	height: 40vh;
+	width: 80%;
+	margin: auto;
+	margin-top: 10px;
+	background-color: blanchedalmond;
+	display: vertical;
+	overflow: scroll;
 }
+  
+#lista > p {
+	margin: 0 auto;
+	padding: 15px 0;
+	height: 30px;
+	width: 100%;
+	color: teal;
+	background-color: snow;
+	border-bottom: 2px dashed slategrey;
+  }
+  

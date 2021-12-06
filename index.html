@@ -25,16 +25,25 @@
             <div class="board_container">
                 <div id="svg"> </div>
             </div>
-            <div class='map_column' id="mc">
-                
-                <div id="selector">
+            <div class='filter_column' id="mc">
                     <div class="selectors" class="button-container">
                         <h4>Buscar cuenta:</h4>
-                        <select id="nombre_cuenta">
+                        <select id="nombre_cuenta">   
                         </select>
-                    </div>
-                </div>
-                                                         
+                        <p>Para filtrar la red, añade cuentas a la lista, pincha sobre el nombre para quitarlo de la lista</p>
+                        <div id = "botones">
+                        </div>
+                        <div id="lista"></div>
+                        <br>
+                        <div id="boton_recalcular"></div>
+                        <p>Desliza para filtrar la red en función al número de conexiones </p>
+                        <div>
+                            <input type="range" id="slider_conexiones">
+                            <input type="number" id="numero_conexiones" style="width: 50px;">  
+                        </div>
+                        <br>
+                
+                    </div>                               
             </div>
         </content>
     <script src="src/index.js"></script>
