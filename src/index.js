@@ -13,7 +13,8 @@ const svg = d3
     .select("#svg")
     .append("svg")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height)
+
 
 
 const conexiones_del_nodo = (nodos, enlaces) => {
@@ -44,21 +45,24 @@ const conexiones_del_nodo = (nodos, enlaces) => {
 // Inicializa botones y selectores
 const nombre_cuenta = document.querySelector("select#nombre_cuenta");
 const agregar_cuenta = d3.select("#botones").append("button").text("añadir");
-const recalcular = d3.select("#boton_recalcular").append("button").text("Recalcular red");
-const slider_conexiones = document.getElementById("slider_conexiones");
-const numero_conexiones = document.getElementById("numero_conexiones");
+const recalcular = d3.select("#boton_recalcular").append("button").text("Calcular sub-red");
+const reiniciar = d3.select("#boton_recalcular").append("button").text("Reiniciar red");
+
 
 
 // contenedor de lista de cuentas seleccionadas
 const lista_cuentas = document.getElementById("lista");
 // DB para filtros
-const cuentas_seleccionadas = [];
+var cuentas_seleccionadas = [];
 
 
 const iniciarSimulacion = (nodos, enlaces) => {
-    console.log("## Nodos ")
-    console.log(nodos);
-    console.log(enlaces);
+    // añade las leyendas
+    svg.append("circle").attr("cx",20).attr("cy",30).attr("r", 6).style("fill", "#ff7f0e");
+    svg.append("circle").attr("cx",20).attr("cy",60).attr("r", 6).style("fill", "#1f77b4");
+    svg.append("text").attr("x", 40).attr("y", 30).text("es una Organización o pertenece a una").style("font-size", "10px").attr("alignment-baseline","middle");
+    svg.append("text").attr("x", 40).attr("y", 60).text("Es una Persona").style("font-size", "10px").attr("alignment-baseline","middle");
+
     nodos.sort(function(a, b){
         //console.log(a);
         if(a.data.full_name < b.data.full_name) { return -1; }
@@ -88,14 +92,14 @@ const iniciarSimulacion = (nodos, enlaces) => {
         .force("carga", d3.forceManyBody())
         .force("centro", d3.forceCenter(width/2, height/2));
     //investigar
-    const scale = d3.scaleOrdinal(d3.schemeCategory10); 
+    const scale = {"1": "#1f77b4", "2": "#ff7f0e"};
     const circleScale = d3.scaleLinear()
         .domain([Math.min(...Object.values(conexiones)), Math.max(...Object.values(conexiones))])
         .range([3, 10]);
 
     // Tooltip para mostrar info del nodo
     const Tooltip = d3.select("#svg").append("div")
-        .style("opacity",0)
+        .style("opacity", 0)
         .attr("class", "tooltip")
 
     const mouseover = function(d) {
@@ -114,7 +118,8 @@ const iniciarSimulacion = (nodos, enlaces) => {
             Tooltip
             .html("@" + d.path[0].__data__.name +"<br> Conexiones: " + conexiones[d.path[0].__data__.id])
             .style("left", (d.path[0].cx.baseVal.value+70) + "px")
-            .style("top", (d.path[0].cy.baseVal.value+20) + "px");
+            .style("top", (d.path[0].cy.baseVal.value+20) + "px")
+            
             
             
             //console.log(d3.select(this))
@@ -169,7 +174,7 @@ const iniciarSimulacion = (nodos, enlaces) => {
         .data(nodos)
         .join("circle")
         .attr("r", (d) => circleScale(conexiones[d.id]))
-        .attr("fill", (d) => scale(d.group))
+        .attr("fill", (d) => scale[d.group])
         .attr("id", (d) => d.id.toString())
         .call(drag(simulacion))
         .on("mouseover", mouseover)
@@ -237,8 +242,10 @@ d3.json("src/relations.json")
     
     })
     
-    // Boton para recalcular red
+    // Boton para calcular sub-red
     recalcular.on("click", (e) => {
+        
+        
         const source_nodes = [];
 
         function verificar_enlaces(value, i){
@@ -267,13 +274,15 @@ d3.json("src/relations.json")
         d3.selectAll("svg > *").remove();
         nodos_filtrados = nodos.filter(verificar_nodos);
         iniciarSimulacion(nodos_filtrados, enlaces_filtrados);
-        
-        
-
+    })
+    // Boton para reiniciar red
+    reiniciar.on("click", (e) => {
+        lista_cuentas.innerHTML = "";
+        cuentas_seleccionadas = [];
+        d3.selectAll("svg > *").remove();
+        iniciarSimulacion(nodos, enlaces)
     })
 
-    // Slider de conexiones
-    // input de numero de conexiones
     
     
   })
